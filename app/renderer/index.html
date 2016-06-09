@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Readium + Electron</title>		
+</head>
+<body>
+	<div id="react-root"></div>
+	<script>	
+		if ('require' in window) {
+			// Readium requirements
+			window.$ = window.jQuery = require('jquery');
+		}
+	
+		var bundlePath = '../../build/renderer.js';
+			
+		if (typeof process !== 'undefined' && process.env.ENVIRONMENT === 'DEV') {
+			bundlePath = 'http://localhost:8080/build/renderer.js';
+		}
+		
+		var bundleScriptElement = document.createElement('script');
+		bundleScriptElement.src = bundlePath;
+		document.currentScript.parentNode.insertBefore(bundleScriptElement, document.currentScript);
+		
+	</script>
+</body>
+</html>

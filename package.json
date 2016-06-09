@@ -1,0 +1,64 @@
+{
+  "name": "readium-electron",
+  "version": "1.0.0",
+  "author": "Cyrille Lebeaupin <clebeaupin@noop.fr>",
+  "main": "./app/main/app.js",
+  "dependencies": {
+    "electron-prebuilt": "^1.1.3",
+    "electron-packager": "^7.0.2",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-storage": "^4.0.0",
+    "redux-storage-engine-localstorage": "^1.1.0",
+    "babel-core": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-register": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "css-loader": "^0.23.1",
+    "sass-loader": "^3.2.0",
+    "text-loader": "^0.0.1",
+    "string-replace-loader": "^1.0.2",
+    "json-loader": "^0.5.4",
+    "node-sass": "^3.7.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "1.14.0",
+    "concurrently": "^2.1.0",
+    "parse-epub": "^3.1.1",
+    "jszip": "^3.0.0",
+    
+    "jquery": "latest",
+    "underscore": "latest",
+    "URIjs": "latest",
+    "crypto-js": "latest",
+    "requirejs-text": "latest",
+    "gift": "latest",
+    "eventemitter3": "latest",
+    "es6-collections": "latest",
+    "FontLoader": "smnh/FontLoader",
+    "rangy": "latest",
+    
+    "zipjs": "danielweck/zip.js",
+    "jquerySizes": "bramstein/jsizes"
+  },
+  "babel": {
+    "presets": ["es2015", "stage-0", "react"]
+  },
+  "bin": {
+    "electron": "./node_modules/.bin/electron",
+    "webpack": "./node_modules/.bin/webpack",
+    "webpack-dev-server": "./node_modules/.bin/webpack-dev-server"
+  },
+  "scripts": {
+    "build-renderer": "webpack --config webpack.config.renderer.js",
+    "build-main": "webpack --config webpack.config.main.js",
+    "build-all": "npm run build-main && npm run build-renderer",
+    "start-dev-renderer": "webpack-dev-server --hot --inline --config webpack.config.renderer.js",
+    "start-dev-main": "ENVIRONMENT=DEV electron -r babel-register --debug=5858 .",
+    "start-dev-all": "concurrently --kill-others \"npm run start-dev-renderer\" \"npm run start-dev-main\""
+  }
+}

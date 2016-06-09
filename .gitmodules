@@ -1,0 +1,4 @@
+[submodule "readium-js"]
+	path = readium-js
+	url = https://github.com/readium/readium-js.git
+	branch = develop

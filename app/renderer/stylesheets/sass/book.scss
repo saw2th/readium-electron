@@ -1,0 +1,31 @@
+.bookList {
+  border: 1px solid #999;
+  padding: 2.5% 0 0 0;
+}
+
+.bookList:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.book {
+  float: left;
+  background: #099;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 30%;
+  min-height: 100px;
+  margin: 0 0 2.5% 2.5%; 
+  text-align: center;
+}
+
+.book .title {
+  font-weight: bold;
+  font-size: 150%;
+}
+
+.book .author {
+  margin-top: 10px;
+  color: #fff;
+}
