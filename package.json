@@ -21,6 +21,9 @@
     "css-loader": "^0.23.1",
     "sass-loader": "^3.2.0",
     "text-loader": "^0.0.1",
+    "script-loader": "^0.7.0",
+    "val-loader": "^0.5.0",
+    "imports-loader": "^0.6.5",
     "string-replace-loader": "^1.0.2",
     "json-loader": "^0.5.4",
     "node-sass": "^3.7.0",
@@ -30,10 +33,11 @@
     "concurrently": "^2.1.0",
     "parse-epub": "^3.1.1",
     "jszip": "^3.0.0",
+    "request": "^2.72.0",
     
     "jquery": "latest",
     "underscore": "latest",
-    "URIjs": "latest",
+    "urijs": "latest",
     "crypto-js": "latest",
     "requirejs-text": "latest",
     "gift": "latest",
@@ -42,7 +46,7 @@
     "FontLoader": "smnh/FontLoader",
     "rangy": "latest",
     
-    "zipjs": "danielweck/zip.js",
+    "zip-js": "0.0.2",
     "jquerySizes": "bramstein/jsizes"
   },
   "babel": {
@@ -56,6 +60,7 @@
   "scripts": {
     "build-renderer": "webpack --config webpack.config.renderer.js",
     "build-main": "webpack --config webpack.config.main.js",
+    "build-readium": "webpack --config webpack.config.readium.js",
     "build-all": "npm run build-main && npm run build-renderer",
     "start-dev-renderer": "webpack-dev-server --hot --inline --config webpack.config.renderer.js",
     "start-dev-main": "ENVIRONMENT=DEV electron -r babel-register --debug=5858 .",

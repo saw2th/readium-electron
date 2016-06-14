@@ -15,7 +15,8 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx'],
         alias: {
-            "readium-js": __dirname + "/build/readium.js"
+            "readium-js": __dirname + "/build/readium.js",
+            "new-zip-js": __dirname + "/build/zip.js"
         }
     },
 
@@ -24,7 +25,7 @@ module.exports = {
             { 
                 test: /\.jsx?$/, 
                 loader: 'babel-loader', 
-                exclude: [/node_modules/, /readium-js/], 
+                exclude: [/node_modules/, /readium-js/, /build/], 
                 query: {
                     presets: ['es2015', 'react', 'stage-0']
                 }

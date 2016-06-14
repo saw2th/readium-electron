@@ -4,6 +4,7 @@ import process from "process";
 
 import React from "react";
 import ReactDOM from "react-dom";
+import { webFrame } from "electron";
 
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
@@ -18,7 +19,15 @@ import BookList from "./components/book/BookList";
 import reducers from "./reducers";
 import { explore } from './actions'
 
+import * as ViewType from './constants/ViewType';
+
 import Readium from "readium-js";
+
+
+webFrame.registerURLSchemeAsPrivileged("epub");
+webFrame.registerURLSchemeAsPrivileged("epub-exploded");
+
+console.log(webFrame);
 
 function render(currentDirectory, directories, books) {
   ReactDOM.render(
@@ -32,8 +41,27 @@ function render(currentDirectory, directories, books) {
   );
 }
 
+
+function renderBook(bookPath) {
+  //var readiumOptions = { useSimpleLoader: true };
+  var readiumOptions = { };
+  var readerOptions = {el: "#readium-root"};
+  var readium = new Readium(readiumOptions, readerOptions);
+  
+  readium.openPackageDocument("epub://" + bookPath, (packageDocument, options) => {
+    console.log(packageDocument);
+  }, null);
+}
+
 function update() {
-  var currentDirectory = store.getState().currentDirectory;
+  var state = store.getState();
+   
+  if (state.view == ViewType.BOOK) {
+    renderBook(state.currentBook.path);
+    return;
+  }
+  
+  var currentDirectory = state.currentDirectory;
   var items = fs.readdirSync(currentDirectory.path);
   var directories = [];
   var bookPromises = [];
@@ -53,7 +81,7 @@ function update() {
     } else if (path.extname(itemPath) == ".epub") {
       // Store all promises that parse epub
       bookPromises.push(new Promise((resolve, reject) => {
-        parseBook("http://epub.local" + itemPath).then(data => {
+        parseBook("epub-exploded://" + itemPath).then(data => {
           resolve({
             path: itemPath,
             metadata: data.metadata
@@ -90,9 +118,12 @@ const store = createStoreWithMiddleware(storage.reducer(reducers));
 const load = storage.createLoader(engine);
 
 store.subscribe(update);
-
+update();
+/*
 load(store)
   .then(newState => {
+    // Register epub protocols
+
     console.log("Previous state has been loaded");
   })
   .catch(err => {
@@ -100,6 +131,4 @@ load(store)
     
     // Explore current directory
     explore(process.cwd());
-  });
-    
-console.log(Readium.version);
+  });*/

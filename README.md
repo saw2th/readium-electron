@@ -21,3 +21,12 @@ Debug with visual studio code
     "env": { },
     "sourceMaps": false,
 }, 
+
+
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        })
+    ],

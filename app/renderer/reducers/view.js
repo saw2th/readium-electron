@@ -11,6 +11,6 @@ export default function view(state = initialState, action) {
     case ActionType.BOOK_VIEW:
       return ViewType.BOOK;
     default:
-      return initialState;
+      return state;
   }
 }
