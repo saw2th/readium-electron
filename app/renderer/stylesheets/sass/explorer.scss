@@ -1,0 +1,74 @@
+$fa-font-path:"../../../../node_modules/font-awesome/fonts";
+@import "../../../../node_modules/font-awesome/scss/font-awesome";
+
+body {
+    margin: 0;
+}
+
+.explorer {
+  
+}
+
+.explorer .navigation-bar {
+    color: white;
+    background: #099;
+    padding: 10px 50px 10px 10px;
+    overflow: hidden;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+.explorer .navigation-bar .back {
+    display: inline;
+    @extend .fa;
+    @extend .fa-arrow-left;
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.explorer .navigation-bar .back label {
+    display: none;
+}
+
+.explorer .navigation-bar .location {
+    display: inline;
+    line-height: 30px;
+    vertical-align: top;
+}
+
+.explorer .navigation-bar .location label {
+    display: none;
+}
+
+.explorer .directory-list {
+  padding: 10px;
+}
+
+.explorer .directory-list:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.explorer .directory {
+  @extend .fa;
+  @extend .fa-folder;
+  float: left;
+  background: #099;
+  margin: 0 0 2.5% 2.5%; 
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 30px;
+  color: white;
+  box-sizing: border-box;
+  width: calc(87.5%/4);
+  height: 120px;
+}
+
+.explorer .directory span {
+  display: block;
+  padding: 10px 0 0 0;
+  font-size: 20px;
+}

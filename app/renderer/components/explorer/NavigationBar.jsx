@@ -14,9 +14,9 @@ class NavigationBar extends React.Component {
     
     render() {     
         return (
-            <div className="navigationBar">
-                <div class="back" onClick={this.handleBackClick}>Back</div>
-                <div class="location"><span>Location: </span>{this.props.path}</div>
+            <div className="navigation-bar">
+                <div className="back" onClick={this.handleBackClick}><label>Back</label></div>
+                <div className="location"><label>Location: </label>{this.props.path}</div>
             </div>
         );
     }

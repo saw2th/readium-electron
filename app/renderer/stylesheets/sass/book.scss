@@ -1,5 +1,4 @@
 .bookList {
-  border: 1px solid #999;
   padding: 2.5% 0 0 0;
 }
 
@@ -14,10 +13,11 @@
   background: #099;
   padding: 10px;
   box-sizing: border-box;
-  width: 30%;
-  min-height: 100px;
+  width: calc(90%/3);
+  min-height: 120px;
   margin: 0 0 2.5% 2.5%; 
   text-align: center;
+  border-radius: 15px;
 }
 
 .book .title {

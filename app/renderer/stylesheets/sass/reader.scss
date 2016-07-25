@@ -1,0 +1,186 @@
+$fa-font-path:"../../../../node_modules/font-awesome/fonts";
+@import "../../../../node_modules/font-awesome/scss/font-awesome";
+
+body {
+    margin: 0;
+}
+
+#reader .previous,
+#reader .next {
+    display: block;
+    position: absolute;
+    top: calc(20% + 40px);
+    height: calc((100vh - 40px) /2);
+    width: 50px;
+    z-index: 10;
+    opacity: 0;
+    font-weight: bold;
+    background: #099;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+}
+
+#reader .previous div,
+#reader .next div {
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+#reader .previous div span,
+#reader .next div span {
+    display: none;
+}
+
+#reader .previous[data-enabled=false] {
+    display: none;
+}
+
+#reader .next[data-enabled=false] {
+    display: none;
+}
+
+#reader .previous {
+    left: 5px;
+}
+
+#reader .next {
+    right: 5px;
+}
+
+#reader .previous div,
+#reader .next div {
+    @extend .fa;
+    font-size: 40px;
+}
+
+#reader .previous div {
+    @extend .fa-chevron-circle-left;
+}
+
+#reader .next div {
+    @extend .fa-chevron-circle-right;
+}
+
+#reader .previous:hover,
+#reader .next:hover {
+    opacity: 100;
+}
+
+#reader .header {
+    font-size: 30px;
+    color: white;
+    background: #099;
+    padding: 10px 50px 10px 10px;
+    font-weight: bold;
+    overflow: hidden;
+    height: 60px;
+    box-sizing: border-box;
+}
+
+#reader .close {
+    @extend .fa;
+    @extend .fa-close;
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    font-size: 40px;
+    color: white;
+}
+
+#reader .close span {
+    display: none;
+}
+
+#reader .view {
+    min-height: calc(100vh - 70px);
+    position: relative;
+    overflow: auto;
+}
+
+#reader .view iframe {
+    border-width: 0;
+}
+
+
+/*Fixed layout */
+
+#fixed-book-frame {
+    position: absolute !important;
+}
+
+
+
+.iframe-fixed {
+    width: 100%;
+    height: 100%;
+}
+
+
+/*Reflowable layout*/
+
+#reflowable-book-frame {
+    position: absolute !important;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0;
+}
+
+#reflowable-content-frame {
+    position: absolute !important;
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-doc-frame {
+    position: relative !important;
+}
+
+/*Classes to use for styling the book*/
+
+/*book*/
+.book-frame {
+
+}
+
+.fixed-book-frame {
+
+}
+
+/*fixed layout frames only*/
+.fixed-page-frame, .fixed-page-frame-left, .fixed-page-frame-right, .fixed-page-frame-center {
+    position: absolute !important;
+}
+
+.fixed-page-frame-left {
+
+}
+
+.fixed-page-frame-right {
+
+}
+
+.fixed-page-frame-center {
+
+} 
+
+/*reflowable layout*/
+.reflowable-book-frame {
+
+}
+
+.reflowable-content-frame {
+
+}
+
+.mo-active-default {
+
+}

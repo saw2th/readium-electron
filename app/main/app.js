@@ -40,7 +40,7 @@ function readZipContent(epubPath, epubContentPath, callback) {
           } 
         }
         
-        epubFile.async("string").then(function(data) {
+        epubFile.async("nodebuffer").then(function(data) {
           callback(data);
         });
       })
@@ -64,17 +64,31 @@ app.on("ready", function() {
     }
   );*/
   // Fake http server for epub files
-  protocol.registerFileProtocol("epub", function(request, callback) {
+  protocol.registerBufferProtocol("epub", function(request, callback) {
     var uri = new URI(request.url);
     var epubPath = uri.path();
     epubPath = path.normalize(epubPath);
     console.log("epub: serve file", epubPath);
-    callback({path: epubPath});
+
+    if (epubPath.indexOf(".epub/") > 0) {
+      // Read zipped epub
+      var epubPathEndIndex = epubPath.indexOf(".epub") + 5;
+      var epubFilePath = epubPath.substr(0, epubPathEndIndex);
+      var epubContentPath = epubPath.substr(epubPathEndIndex + 1);
+      readZipContent(epubFilePath, epubContentPath, function(data) {
+          callback(data);
+      });
+    } else {
+      fs.readFile(epubPath, function (err, data ) {
+        callback(data);
+      });
+      
+    }
   }, function (error) {        
       if (error)
           console.error("Failed to register protocol");
   });
-  
+  /*
   protocol.registerStringProtocol("epub-exploded", function(request, callback) {
       var epubFullPath = request.url.substr(15);
       var epubPathEndIndex = epubFullPath.indexOf(".epub") + 5;
@@ -88,7 +102,7 @@ app.on("ready", function() {
   }, function (error) {        
       if (error)
           console.error("Failed to register protocol");
-  });
+  });*/
 
   
   // Create the browser window.
@@ -98,9 +112,12 @@ app.on("ready", function() {
       webSecurity: false
     }
   });
+  
+  // Hide menu
+  mainWindow.setMenu(null);
 
   // and load the index.html of the app.
-  mainWindow.loadURL("epub://" + __dirname + "/../renderer/index.html");
+  mainWindow.loadURL("epub://" +  path.normalize(__dirname + "/../renderer/index.html"));
   
   /*session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     var url = details.url;
@@ -116,7 +133,7 @@ app.on("ready", function() {
   // Only open dev tools in dev environment
   if(process.env.ENVIRONMENT === "DEV") {
     // Open the DevTools.
-    //mainWindow.openDevTools();
+    mainWindow.openDevTools();
   }
 
   // Emitted when the window is closed.

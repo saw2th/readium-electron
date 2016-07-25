@@ -10,14 +10,14 @@ class Book extends React.Component {
   }
   
   handleClick() {
-    this.context.store.dispatch(viewBook(this.props.path));
+    this.context.store.dispatch(viewBook(this.props.book));
   }
   
   render() {
     return (
       <div className="book" onClick={this.handleClick}>
-        <div className="title">{this.props.title}</div>
-        <div className="author">{this.props.author}</div>
+        <div className="title">{this.props.book.title}</div>
+        <div className="author">{this.props.book.author}</div>
       </div>
     );
   }

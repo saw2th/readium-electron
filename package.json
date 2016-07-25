@@ -10,6 +10,7 @@
     "react-dom": "^15.1.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
+    "redux-watch": "^1.1.1",
     "redux-storage": "^4.0.0",
     "redux-storage-engine-localstorage": "^1.1.0",
     "babel-core": "^6.9.0",
@@ -20,6 +21,7 @@
     "babel-loader": "^6.2.4",
     "css-loader": "^0.23.1",
     "sass-loader": "^3.2.0",
+    "file-loader": "^0.9.0",
     "text-loader": "^0.0.1",
     "script-loader": "^0.7.0",
     "val-loader": "^0.5.0",
@@ -30,12 +32,13 @@
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "1.14.0",
+    "webpack-node-externals": "^1.2.0",
+    "font-awesome": "^4.6.3",
     "concurrently": "^2.1.0",
     "parse-epub": "^3.1.1",
     "jszip": "^3.0.0",
     "request": "^2.72.0",
-    
-    "jquery": "latest",
+    "jquery": "^2.2.4",
     "underscore": "latest",
     "urijs": "latest",
     "crypto-js": "latest",
@@ -45,25 +48,20 @@
     "es6-collections": "latest",
     "FontLoader": "smnh/FontLoader",
     "rangy": "latest",
-    
     "zip-js": "0.0.2",
     "jquerySizes": "bramstein/jsizes"
   },
   "babel": {
     "presets": ["es2015", "stage-0", "react"]
   },
-  "bin": {
-    "electron": "./node_modules/.bin/electron",
-    "webpack": "./node_modules/.bin/webpack",
-    "webpack-dev-server": "./node_modules/.bin/webpack-dev-server"
-  },
   "scripts": {
-    "build-renderer": "webpack --config webpack.config.renderer.js",
-    "build-main": "webpack --config webpack.config.main.js",
-    "build-readium": "webpack --config webpack.config.readium.js",
-    "build-all": "npm run build-main && npm run build-renderer",
-    "start-dev-renderer": "webpack-dev-server --hot --inline --config webpack.config.renderer.js",
-    "start-dev-main": "ENVIRONMENT=DEV electron -r babel-register --debug=5858 .",
+    "build-renderer": "./node_modules/.bin/webpack --config webpack.config.renderer.js",
+    "build-main": "./node_modules/.bin/webpack --config webpack.config.main.js",
+    "build-readium": "./node_modules/.bin/webpack --config webpack.config.readium.js",
+    "build-zip": "./node_modules/.bin/webpack --config webpack.config.zip.js",
+    "build-all": "npm run build-zip && npm run build-readium && npm run build-main && npm run build-renderer",
+    "start-dev-renderer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.config.renderer.js",
+    "start-dev-main": "ENVIRONMENT=DEV ./node_modules/.bin/electron -r babel-register --debug=5858 .",
     "start-dev-all": "concurrently --kill-others \"npm run start-dev-renderer\" \"npm run start-dev-main\""
   }
 }

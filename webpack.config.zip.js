@@ -27,8 +27,8 @@ module.exports = {
                 loader: 'string-replace',
                 query: {
                     multiple: [
-                        { search: '(function(obj) {', replace: 'define([], function() { var obj = {zip: null};'},
-                        { search: '})(this);', replace: 'zip = obj.zip; zip_inflate_extend(zip); zip_fs_extend(zip); zip_ext_extend(zip); return zip; });'}
+                        { search: '(function(obj) {', replace: 'define([], function() { var obj = {zip: null}; '},
+                        { search: '})(this);', replace: ' zip = obj.zip; zip_inflate_extend(zip); zip_fs_extend(zip); zip_ext_extend(zip); return zip; });'}
                     ]
                 }
             },
@@ -57,16 +57,7 @@ module.exports = {
                 loader: 'string-replace',
                 query: {
                     multiple: [
-                        { search: '(function(global) {', replace: 'define([], function() { var zip_extend = function(zip) {'},
-                        { search: '})(this);', replace: '}; return zip_extend;})'}
-                    ]
-                }
-            },
-            {
-                test: /inflate\.js$/,
-                loader: 'string-replace',
-                query: {
-                    multiple: [
+                        { search: 'var env = global.zip || global;', replace: 'var env = zip;'},
                         { search: '(function(global) {', replace: 'define([], function() { var zip_extend = function(zip) {'},
                         { search: '})(this);', replace: '}; return zip_extend;})'}
                     ]

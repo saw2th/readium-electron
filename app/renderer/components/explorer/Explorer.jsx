@@ -1,3 +1,5 @@
+require('../../stylesheets/sass/explorer.scss');
+
 import React from "react";
 
 import NavigationBar from "./NavigationBar";
@@ -26,7 +28,7 @@ class Explorer extends React.Component {
         return (
             <div className="explorer">
                 <NavigationBar path={this.props.currentDirectory.path} name={this.props.currentDirectory.name} />
-                <div class="directoryList">
+                <div className="directory-list">
                     {directoryNodes}
                 </div>
             </div>

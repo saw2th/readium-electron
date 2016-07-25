@@ -15,9 +15,9 @@ export function exploreUp() {
   }
 }
 
-export function viewBook(path) {
+export function viewBook(book) {
   return {
     type: ActionType.BOOK_VIEW,
-    path: path
+    book: book
   }
 };

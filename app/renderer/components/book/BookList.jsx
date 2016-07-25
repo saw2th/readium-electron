@@ -8,7 +8,7 @@ export default class BookList extends React.Component {
   render() {
     var bookNodes = this.props.books.map(function(book, index) {
       return (
-        <Book key={index} title={book.title} author={book.author} path={book.path} />
+        <Book key={index} book={book} />
       );
     });
     

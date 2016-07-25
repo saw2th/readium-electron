@@ -10,9 +10,7 @@ const initialState = {
 export default function currentBook(state = initialState, action) {
   switch (action.type) {
     case ActionType.BOOK_VIEW:
-      return {
-          path: action.path
-        };
+      return action.book;
     case ActionType.BOOK_CLOSE:
       return initialState;
     default:

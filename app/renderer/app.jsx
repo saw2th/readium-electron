@@ -10,26 +10,22 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import * as storage from 'redux-storage'
 import createEngine from 'redux-storage-engine-localstorage';
+import watch from 'redux-watch'
 
 import { parseBook } from "parse-epub";
 
 import Explorer from "./components/explorer/Explorer";
 import BookList from "./components/book/BookList";
+import Reader from "./components/book/Reader";
 
 import reducers from "./reducers";
 import { explore } from './actions'
 
 import * as ViewType from './constants/ViewType';
 
-import Readium from "readium-js";
-
-
 webFrame.registerURLSchemeAsPrivileged("epub");
-webFrame.registerURLSchemeAsPrivileged("epub-exploded");
 
-console.log(webFrame);
-
-function render(currentDirectory, directories, books) {
+function renderExplorer(currentDirectory, directories, books) {
   ReactDOM.render(
     <Provider store={store}>
       <div>
@@ -41,27 +37,18 @@ function render(currentDirectory, directories, books) {
   );
 }
 
-
-function renderBook(bookPath) {
-  //var readiumOptions = { useSimpleLoader: true };
-  var readiumOptions = { };
-  var readerOptions = {el: "#readium-root"};
-  var readium = new Readium(readiumOptions, readerOptions);
-  
-  readium.openPackageDocument("epub://" + bookPath, (packageDocument, options) => {
-    console.log(packageDocument);
-  }, null);
+function renderBook(book) {
+  ReactDOM.render(
+    <Provider store={store}>
+      <div>
+        <Reader book={book} />
+      </div>
+    </Provider>,
+    document.getElementById("react-root")
+  );
 }
 
-function update() {
-  var state = store.getState();
-   
-  if (state.view == ViewType.BOOK) {
-    renderBook(state.currentBook.path);
-    return;
-  }
-  
-  var currentDirectory = state.currentDirectory;
+function exploreDirectory(currentDirectory) {
   var items = fs.readdirSync(currentDirectory.path);
   var directories = [];
   var bookPromises = [];
@@ -81,7 +68,7 @@ function update() {
     } else if (path.extname(itemPath) == ".epub") {
       // Store all promises that parse epub
       bookPromises.push(new Promise((resolve, reject) => {
-        parseBook("epub-exploded://" + itemPath).then(data => {
+        parseBook("epub://" + itemPath).then(data => {
           resolve({
             path: itemPath,
             metadata: data.metadata
@@ -107,7 +94,7 @@ function update() {
       });
     });
     
-    render(currentDirectory, directories, books);
+    renderExplorer(currentDirectory, directories, books);
   });
 }
 
@@ -117,18 +104,35 @@ const createStoreWithMiddleware = applyMiddleware(middleware)(createStore);
 const store = createStoreWithMiddleware(storage.reducer(reducers));
 const load = storage.createLoader(engine);
 
-store.subscribe(update);
-update();
-/*
 load(store)
   .then(newState => {
     // Register epub protocols
-
     console.log("Previous state has been loaded");
   })
   .catch(err => {
     console.log('Failed to load previous state', err);
-    
     // Explore current directory
     explore(process.cwd());
-  });*/
+  });
+
+
+// Listener for explorer view
+let currentDirectoryWatcher = watch(store.getState, 'currentDirectory');
+
+store.subscribe(currentDirectoryWatcher((newDirectory, oldDirectory, objectPath) => {
+  if (store.getState().view == ViewType.EXPLORER) {
+    console.log("currentDirectoryWatcher", newDirectory);
+    exploreDirectory(newDirectory);
+  }
+}));
+
+// Listener for view
+let currentBookWatcher = watch(store.getState, 'currentBook');
+
+store.subscribe(currentBookWatcher((newBook, oldBook, objectPath) => {
+  if (store.getState().view == ViewType.BOOK) {
+    console.log("currentBookWatcher", newBook);
+    renderBook(newBook);
+  }
+}));
+

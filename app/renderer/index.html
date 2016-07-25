@@ -5,23 +5,32 @@
 </head>
 <body>
 	<div id="react-root"></div>
-	<div id="readium-root"></div>
-	<script>	
-		/*if ('require' in window) {
-			// Readium requirements
-			window.$ = window.jQuery = require('jquery');
-		}*/
 	
-		var bundlePath = '../../build/renderer.js';
-			
+	<script>
+		zip = {};
+		// Include renderer vendors 
+		var scriptPath = '../../build/renderer.vendor.js';
+				
 		if (typeof process !== 'undefined' && process.env.ENVIRONMENT === 'DEV') {
-			bundlePath = 'http://localhost:8080/build/renderer.js';
+			scriptPath = 'http://localhost:8080/build/renderer.vendor.js';
 		}
 		
-		var bundleScriptElement = document.createElement('script');
-		bundleScriptElement.src = bundlePath;
-		document.currentScript.parentNode.insertBefore(bundleScriptElement, document.currentScript);
+		var scriptElement = document.createElement('script');
+		scriptElement.src = scriptPath;
+		scriptElement.async = false;
+		document.currentScript.parentNode.insertBefore(scriptElement, document.currentScript);
+
+		// Include renderer code
+		var scriptPath = '../../build/renderer.js';
+				
+		if (typeof process !== 'undefined' && process.env.ENVIRONMENT === 'DEV') {
+			scriptPath = 'http://localhost:8080/build/renderer.js';
+		}
 		
+		var scriptElement = document.createElement('script');
+		scriptElement.src = scriptPath;
+		scriptElement.async = false;
+		document.currentScript.parentNode.insertBefore(scriptElement, document.currentScript);
 	</script>
 </body>
 </html>

@@ -11,20 +11,18 @@ module.exports = {
         pathinfo: true,
         path: __dirname + '/build'
     },
-    
     plugins: [
         new webpack.DefinePlugin({
             READIUM_VERSION: "1.0.0"
         })      
     ],
 
-
     resolve: {
         extensions: ['', '.js'],
         alias: {
             "version.json": __dirname + "/readium-js/build-output/version.json",
             "jquerySizes": "jquery-sizes/lib/jquery.sizes.js",
-            "zip-ext": __dirname + "/build/zip.js",
+            //"zip-ext": __dirname + "/build/zip.js",
             "URIjs": "urijs",
             "cryptoJs/sha1": "crypto-js/sha1",
             "eventEmitter": "eventemitter3",
@@ -44,6 +42,28 @@ module.exports = {
                     multiple: [
                         { search: 'var package = ', replace: 'var oPackage = ' },
                         { search: 'var smil = package', replace: 'var smil = oPackage' }
+                    ]
+                }
+            },
+            {
+                test: /publication_fetcher\.js$/,
+                loader: 'string-replace',
+                query: {
+                    multiple: [
+                        // Always use plain fetcher
+                        { search: " ZipResourceFetcher,", replace: "" },
+                        { search: " '\./zip_resource_fetcher',", replace: "" },
+                        { search: "if (isExploded) {", replace: 'if (true) {' }
+                        
+                    ]
+                }
+            },
+            {
+                test: /loader\.js$/,
+                loader: 'string-replace',
+                query: {
+                    multiple: [
+                        { search: "$('svg', doc).load(function(){", replace: '$("svg", doc).on("load", function(){' }
                     ]
                 }
             },

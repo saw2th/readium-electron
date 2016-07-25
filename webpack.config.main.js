@@ -1,6 +1,18 @@
+var webpack = require('webpack');
+
 module.exports = {
     context: __dirname + '/app/main',
-    entry: './app.js',
+    entry: {
+        main : './app.js'
+    },
+    externals: [
+        {
+            'fs': true, 
+            'path': true, 
+            'urijs': true, 
+            'jszip': true
+        }
+    ],
 
     output: {
         filename: 'main.js',

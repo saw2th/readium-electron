@@ -1,3 +1,5 @@
+require('../../stylesheets/sass/explorer.scss');
+
 import React from "react";
 
 import { explore } from '../../actions'
@@ -16,9 +18,9 @@ class Directory extends React.Component {
   render() {
     return (
       <div className="directory" onClick={this.handleClick}>
-        <h2 className="directory">
+        <span>
           {this.props.name}
-        </h2>
+        </span>
       </div>
     );
   }
