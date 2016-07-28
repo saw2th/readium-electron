@@ -90,6 +90,10 @@ module.exports = {
                 loader: 'imports?$=jquery'
             },
             {
+                test: /encryption_handler\.js$/,
+                loader: 'imports?$=jquery'
+            },
+            {
                 test: /cfi_navigation_logic\.js$/,
                 loader: 'imports?ReadiumSDK=readium_globals_js'
             },
