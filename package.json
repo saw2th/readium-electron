@@ -54,7 +54,8 @@
     "zip-js": "0.0.2",
     "jquerySizes": "bramstein/jsizes",
     "electron-builder": "^5.14.2",
-    "rmdir": "^1.2.0"
+    "rmdir": "^1.2.0",
+    "cross-env": "^2.0.0"
   },
   "babel": {
     "presets": ["es2015", "stage-0", "react"],
@@ -67,8 +68,8 @@
     "build-zip": "./node_modules/.bin/webpack --config webpack.config.zip.js",
     "build-all": "npm run build-readium && npm run build-main && npm run build-renderer",
     "start": "./node_modules/.bin/electron -r babel-register .",
-    "start-dev-renderer": "ENVIRONMENT=DEV ./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.config.renderer.js",
-    "start-dev-main": "APP_ENTRY_RELATIVE_URL='/../renderer/index.html' ENVIRONMENT=DEV ./node_modules/.bin/electron -r babel-register .",
+    "start-dev-renderer": "cross-env ENVIRONMENT=DEV ./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.config.renderer.js",
+    "start-dev-main": "cross-env APP_ENTRY_RELATIVE_URL='/../renderer/index.html' ENVIRONMENT=DEV ./node_modules/.bin/electron -r babel-register .",
     "start-dev-all": "concurrently --kill-others \"npm run start-dev-renderer\" \"npm run start-dev-main\"",
     "pack": "node -r babel-register pack.js",
     "dist": "node -r babel-register dist.js"
