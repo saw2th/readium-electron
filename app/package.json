@@ -1,0 +1,7 @@
+{
+  "name": "readium-electron",
+  "version": "1.0.0",
+  "author": "Cyrille Lebeaupin <clebeaupin@noop.fr>",
+  "description": "Readium working on electron",
+  "main": "./main.js"
+}

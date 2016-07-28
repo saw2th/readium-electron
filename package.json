@@ -19,9 +19,11 @@
     "babel-preset-react": "^6.5.0",
     "babel-register": "^6.9.0",
     "babel-loader": "^6.2.4",
+    "babel-plugin-transform-inline-environment-variables": "^6.8.0",
     "css-loader": "^0.23.1",
     "sass-loader": "^3.2.0",
     "file-loader": "^0.9.0",
+    "url-loader": "^0.5.7",
     "text-loader": "^0.0.1",
     "script-loader": "^0.7.0",
     "val-loader": "^0.5.0",
@@ -33,6 +35,7 @@
     "webpack": "^1.13.1",
     "webpack-dev-server": "1.14.0",
     "webpack-node-externals": "^1.2.0",
+    "html-webpack-plugin": "^2.22.0",
     "font-awesome": "^4.6.3",
     "concurrently": "^2.1.0",
     "parse-epub": "^3.1.1",
@@ -49,19 +52,25 @@
     "FontLoader": "smnh/FontLoader",
     "rangy": "latest",
     "zip-js": "0.0.2",
-    "jquerySizes": "bramstein/jsizes"
+    "jquerySizes": "bramstein/jsizes",
+    "electron-builder": "^5.14.2",
+    "rmdir": "^1.2.0"
   },
   "babel": {
-    "presets": ["es2015", "stage-0", "react"]
+    "presets": ["es2015", "stage-0", "react"],
+    "plugins": ["transform-inline-environment-variables"]
   },
   "scripts": {
     "build-renderer": "./node_modules/.bin/webpack --config webpack.config.renderer.js",
     "build-main": "./node_modules/.bin/webpack --config webpack.config.main.js",
     "build-readium": "./node_modules/.bin/webpack --config webpack.config.readium.js",
     "build-zip": "./node_modules/.bin/webpack --config webpack.config.zip.js",
-    "build-all": "npm run build-zip && npm run build-readium && npm run build-main && npm run build-renderer",
-    "start-dev-renderer": "./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.config.renderer.js",
-    "start-dev-main": "ENVIRONMENT=DEV ./node_modules/.bin/electron -r babel-register --debug=5858 .",
-    "start-dev-all": "concurrently --kill-others \"npm run start-dev-renderer\" \"npm run start-dev-main\""
+    "build-all": "npm run build-readium && npm run build-main && npm run build-renderer",
+    "start": "./node_modules/.bin/electron -r babel-register .",
+    "start-dev-renderer": "ENVIRONMENT=DEV ./node_modules/.bin/webpack-dev-server --hot --inline --config webpack.config.renderer.js",
+    "start-dev-main": "APP_ENTRY_RELATIVE_URL='/../renderer/index.html' ENVIRONMENT=DEV ./node_modules/.bin/electron -r babel-register .",
+    "start-dev-all": "concurrently --kill-others \"npm run start-dev-renderer\" \"npm run start-dev-main\"",
+    "pack": "node -r babel-register pack.js",
+    "dist": "node -r babel-register dist.js"
   }
 }

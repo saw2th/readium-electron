@@ -1,5 +1,4 @@
-Readium + Electron
-##################
+# Readium + Electron
 
 npm install
 
@@ -30,3 +29,14 @@ Debug with visual studio code
             }
         })
     ],
+
+
+# Builder
+
+sudo apt install icnsutils
+sudo apt install graphicsmagick
+
+# TODO
+
+    "lint": "node ./node_modules/.bin/eslint",
+    "lint-jsx": "node ./node_modules/.bin/eslint app/**/**.jsx",

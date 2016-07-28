@@ -108,6 +108,12 @@ load(store)
   .then(newState => {
     // Register epub protocols
     console.log("Previous state has been loaded");
+    
+    if (store.getState().view == ViewType.EXPLORER) {
+      exploreDirectory(store.getState().currentDirectory);
+    } else if (store.getState().view == ViewType.BOOK) {
+      renderBook(store.getState().currentBook);
+    }
   })
   .catch(err => {
     console.log('Failed to load previous state', err);

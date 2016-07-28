@@ -3,6 +3,7 @@ import JSZip from "jszip";
 import fs from "fs";
 import path from "path";
 import URI from "urijs";
+import process from "process";
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -51,8 +52,6 @@ function readZipContent(epubPath, epubContentPath, callback) {
       });
   });
 }
-      
-//protocol.registerStandardSchemes(['epub']);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -63,6 +62,7 @@ app.on("ready", function() {
       return null;
     }
   );*/
+
   // Fake http server for epub files
   protocol.registerBufferProtocol("epub", function(request, callback) {
     var uri = new URI(request.url);
@@ -116,8 +116,9 @@ app.on("ready", function() {
   // Hide menu
   mainWindow.setMenu(null);
 
-  // and load the index.html of the app.
-  mainWindow.loadURL("epub://" +  path.normalize(__dirname + "/../renderer/index.html"));
+  // and load the entry html page
+  console.log(process.env.APP_ENTRY_RELATIVE_URL);
+  mainWindow.loadURL("epub://" + path.normalize(__dirname + process.env.APP_ENTRY_RELATIVE_URL));
   
   /*session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     var url = details.url;
