@@ -2,8 +2,8 @@ import {app, BrowserWindow, protocol, session } from "electron";
 import JSZip from "jszip";
 import fs from "fs";
 import path from "path";
-import URI from "urijs";
 import process from "process";
+import os from "os";
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -19,28 +19,28 @@ app.on("window-all-closed", function() {
 });
 
 // Read content in epub
-function readZipContent(epubPath, epubContentPath, callback) { 
+function readZipContent(epubPath, epubContentPath, callback) {
   fs.readFile(epubPath, function(err, data) {
     if (err) {
       return console.log(err);
     }
-    
+
     JSZip.loadAsync(data)
       .then(function (zip) {
         var epubFile = zip.file(epubContentPath);
-        
+
         if (epubFile == null) {
           if (epubContentPath.startsWith("OPS")) {
-            // Try EPUB, OEBPS sub directory 
+            // Try EPUB, OEBPS sub directory
             epubFile = zip.file("EPUB" + epubContentPath.substring(3));
           }
-          
+
           if (epubFile == null) {
             console.log('Unable to open content', epubPath, epubContentPath);
             return callback(null);
-          } 
+          }
         }
-        
+
         epubFile.async("nodebuffer").then(function(data) {
           callback(data);
         });
@@ -65,16 +65,25 @@ app.on("ready", function() {
 
   // Fake http server for epub files
   protocol.registerBufferProtocol("epub", function(request, callback) {
-    var uri = new URI(request.url);
-    var epubPath = uri.path();
+    var epubPath = request.url.substring(7);
     epubPath = path.normalize(epubPath);
     console.log("epub: serve file", epubPath);
 
-    if (epubPath.indexOf(".epub/") > 0) {
+    if (epubPath.indexOf(".epub/") > 0 ||
+        epubPath.indexOf(".epub\\") > 0 ) {
       // Read zipped epub
       var epubPathEndIndex = epubPath.indexOf(".epub") + 5;
       var epubFilePath = epubPath.substr(0, epubPathEndIndex);
       var epubContentPath = epubPath.substr(epubPathEndIndex + 1);
+
+      // Fix windows path
+      if (os.platform() == "win32" && epubFilePath.indexOf("C\\") == 0) {
+        epubFilePath = epubFilePath.replace("C\\", "C:\\");
+      }
+
+      // Replace back slash by slash
+      epubContentPath = epubContentPath.replace(/\\/g, "/");
+
       readZipContent(epubFilePath, epubContentPath, function(data) {
           callback(data);
       });
@@ -82,9 +91,9 @@ app.on("ready", function() {
       fs.readFile(epubPath, function (err, data ) {
         callback(data);
       });
-      
+
     }
-  }, function (error) {        
+  }, function (error) {
       if (error)
           console.error("Failed to register protocol");
   });
@@ -95,42 +104,42 @@ app.on("ready", function() {
       var epubPath = epubFullPath.substr(0, epubPathEndIndex);
       var epubContentPath = epubFullPath.substr(epubPathEndIndex + 1);
       console.log("epub-exploded:", epubPath, epubContentPath);
-      
+
       readZipContent(epubPath, epubContentPath, function(data) {
         callback(data);
       });
-  }, function (error) {        
+  }, function (error) {
       if (error)
           console.error("Failed to register protocol");
   });*/
 
-  
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1000, height: 600, 
+    width: 1000, height: 600,
     webPreferences: {
       webSecurity: false
     }
   });
-  
+
   // Hide menu
   mainWindow.setMenu(null);
 
   // and load the entry html page
   console.log(process.env.APP_ENTRY_RELATIVE_URL);
   mainWindow.loadURL("epub://" + path.normalize(__dirname + process.env.APP_ENTRY_RELATIVE_URL));
-  
+
   /*session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     var url = details.url;
-    
+
     if (url.startsWith("http://epub.local")) {
       var url = "epub://" + url.substr(17);
       return callback({cancel: false, redirectURL: url});
-    } 
-    
+    }
+
     return callback({cancel: false});
   });*/
-  
+
   // Only open dev tools in dev environment
   if(process.env.ENVIRONMENT === "DEV") {
     // Open the DevTools.
