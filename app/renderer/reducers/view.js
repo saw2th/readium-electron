@@ -1,8 +1,8 @@
 import path from "path";
 import process from "process";
 
-import * as ActionType from '../constants/ActionType'
-import * as ViewType from '../constants/ViewType'
+import * as ActionType from 'renderer/constants/ActionType'
+import * as ViewType from 'renderer/constants/ViewType'
 
 const initialState = ViewType.EXPLORER;
 

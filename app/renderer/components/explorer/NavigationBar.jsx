@@ -1,18 +1,18 @@
 import React from "react";
 
-import { exploreUp } from '../../actions'
+import { exploreUp } from 'renderer/actions'
 
 class NavigationBar extends React.Component {
     constructor(props) {
         super(props);
         this.handleBackClick = this.handleBackClick.bind(this);
     }
-  
+
     handleBackClick() {
         this.context.store.dispatch(exploreUp());
     }
-    
-    render() {     
+
+    render() {
         return (
             <div className="navigation-bar">
                 <div className="back" onClick={this.handleBackClick}><label>Back</label></div>

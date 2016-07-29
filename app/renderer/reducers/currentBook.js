@@ -1,7 +1,7 @@
 import path from "path";
 import process from "process";
 
-import * as ActionType from '../constants/ActionType'
+import * as ActionType from 'renderer/constants/ActionType'
 
 const initialState = {
   path: null

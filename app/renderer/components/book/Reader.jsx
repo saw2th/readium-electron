@@ -1,4 +1,4 @@
-require('../../stylesheets/sass/reader.scss');
+require("renderer/stylesheets/sass/reader.scss");
 
 //import FontAwesome from "react-fontawesome";
 import path from "path";
@@ -6,7 +6,7 @@ import path from "path";
 import React from "react";
 import Readium from "readium-js";
 
-import { explore } from '../../actions'
+import { explore } from 'renderer/actions'
 
 /**
  * Properties:
@@ -16,8 +16,8 @@ class Reader extends React.Component {
     constructor(props) {
         super(props);
         this.readium = null;
-        this.state = { 
-            hasPreviousPage: true, 
+        this.state = {
+            hasPreviousPage: true,
             hasNextPage: true
         };
 
@@ -28,8 +28,8 @@ class Reader extends React.Component {
     }
 
     buildState() {
-        this.setState({ 
-            hasPreviousPage: this.hasPreviousPage(), 
+        this.setState({
+            hasPreviousPage: this.hasPreviousPage(),
             hasNextPage: this.hasNextPage()
         });
     }
@@ -46,7 +46,7 @@ class Reader extends React.Component {
         this.readium.reader.on("PaginationChanged", function (iframe, spineItem) {
             // Pagination changed
             obj.buildState();
-        });   
+        });
     }
 
     /**
@@ -55,7 +55,7 @@ class Reader extends React.Component {
     hasPreviousPage() {
         var spine = this.readium.reader.spine();
         var paginationInfo = this.readium.reader.getPaginationInfo();
-        
+
         if (paginationInfo.openPages.length == 0) {
             return false;
         }
@@ -115,7 +115,7 @@ class Reader extends React.Component {
         this.readium.closePackageDocument();
         this.context.store.dispatch(explore(path.dirname(this.props.book.path)));
     }
-    
+
     render() {
         return (
           <div id="reader">

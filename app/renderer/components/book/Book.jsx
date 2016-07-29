@@ -1,18 +1,18 @@
 import React from "react";
 
-import { viewBook } from '../../actions'
+import { viewBook } from 'renderer/actions'
 
 class Book extends React.Component {
   constructor(props) {
       super(props);
-      
+
       this.handleClick = this.handleClick.bind(this);
   }
-  
+
   handleClick() {
     this.context.store.dispatch(viewBook(this.props.book));
   }
-  
+
   render() {
     return (
       <div className="book" onClick={this.handleClick}>

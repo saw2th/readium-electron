@@ -1,6 +1,6 @@
 import path from "path";
 
-import * as ActionType from '../constants/ActionType'
+import * as ActionType from 'renderer/constants/ActionType'
 
 export function explore(path) {
   return {

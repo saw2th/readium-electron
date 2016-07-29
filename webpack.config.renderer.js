@@ -1,6 +1,7 @@
 var webpack = require("webpack");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var process = require("process");
+var path = require("path");
 
 // Resources that vary depending on environment (prod or dev)
 var devtool = null;
@@ -38,7 +39,7 @@ if (process.env.ENVIRONMENT == "DEV") {
             compress: {
                 warnings: false
             }
-        })    
+        })
     );
 }
 
@@ -59,39 +60,40 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx'],
         alias: {
-            "readium-js": __dirname + "/build/readium.js"
+            "readium-js": __dirname + "/build/readium.js",
+            "renderer": path.resolve(__dirname, 'app', 'renderer')
         }
     },
 
     module: {
         loaders: [
-            { 
-                test: /\.jsx?$/, 
-                loader: 'babel-loader', 
-                exclude: [/node_modules/, /readium.js/], 
+            {
+                test: /\.jsx?$/,
+                loader: 'babel-loader',
+                exclude: [/node_modules/, /readium.js/],
                 query: {
                     presets: ['es2015', 'react', 'stage-0']
                 }
-            }, 
-            { 
-                test: /\.scss$/, 
-                loader: 'style-loader!css-loader!sass-loader' 
             },
-            { 
-                test: /\.json$/, 
+            {
+                test: /\.scss$/,
+                loader: 'style-loader!css-loader!sass-loader'
+            },
+            {
+                test: /\.json$/,
                 loader: "json-loader"
             },
-            { 
-                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-                loader: "url-loader?name=[name].[ext]&limit=10000&mimetype=application/font-woff" 
+            {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "url-loader?name=[name].[ext]&limit=10000&mimetype=application/font-woff"
             },
-            { 
-                test: /\.html$/, 
-                loader: "file?name=[name].[ext]" 
+            {
+                test: /\.html$/,
+                loader: "file?name=[name].[ext]"
             },
-            { 
-                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-                loader: "file?name=[name].[ext]" 
+            {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "file?name=[name].[ext]"
             }
         ]
     },

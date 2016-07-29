@@ -1,5 +1,5 @@
-$fa-font-path:"../../../../node_modules/font-awesome/fonts";
-@import "../../../../node_modules/font-awesome/scss/font-awesome";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 
 body {
     margin: 0;
@@ -170,7 +170,7 @@ body {
 
 .fixed-page-frame-center {
 
-} 
+}
 
 /*reflowable layout*/
 .reflowable-book-frame {

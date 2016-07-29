@@ -1,4 +1,4 @@
-require('../../stylesheets/sass/book.scss');
+require("renderer/stylesheets/sass/book.scss");
 
 import React from "react";
 
@@ -11,7 +11,7 @@ export default class BookList extends React.Component {
         <Book key={index} book={book} />
       );
     });
-    
+
     return (
       <div className="bookList">
         {bookNodes}

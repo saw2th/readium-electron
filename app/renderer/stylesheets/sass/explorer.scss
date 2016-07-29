@@ -1,12 +1,12 @@
-$fa-font-path:"../../../../node_modules/font-awesome/fonts";
-@import "../../../../node_modules/font-awesome/scss/font-awesome";
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
 
 body {
     margin: 0;
 }
 
 .explorer {
-  
+
 }
 
 .explorer .navigation-bar {
@@ -57,7 +57,7 @@ body {
   @extend .fa-folder;
   float: left;
   background: #099;
-  margin: 0 0 2.5% 2.5%; 
+  margin: 0 0 2.5% 2.5%;
   border-radius: 15px;
   padding: 10px;
   font-size: 30px;
