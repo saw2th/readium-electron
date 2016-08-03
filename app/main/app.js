@@ -118,7 +118,7 @@ app.on("ready", function() {
   mainWindow = new BrowserWindow({
     width: 1000, height: 600,
     webPreferences: {
-      webSecurity: false
+      plugins: true
     }
   });
 
