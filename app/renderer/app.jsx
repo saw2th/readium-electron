@@ -4,15 +4,13 @@ import process from "process";
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { webFrame } from "electron";
+import { webFrame, ipcRenderer } from "electron";
 
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import * as storage from 'redux-storage'
 import createEngine from 'redux-storage-engine-localstorage';
 import watch from 'redux-watch'
-
-import { parseBook } from "parse-epub";
 
 import Explorer from "./components/explorer/Explorer";
 import BookList from "./components/book/BookList";
@@ -23,6 +21,65 @@ import { explore } from './actions'
 
 import * as ViewType from './constants/ViewType';
 
+// Get readium plugin
+const readiumSdk = document.getElementById("readium-sdk");
+
+if (readiumSdk == null) {
+  let msg = "Unable to instantiate readium sdk";
+  console.error(msg);
+  throw msg;
+}
+
+var readiumSdkCallbackMapping = {};
+var readiumSdkMessageId = 0;
+
+ipcRenderer.on("ipc:callback:request", (event, id, request) => {
+  let callback = (response) => {
+    if (response instanceof ArrayBuffer) {
+      // Binary data
+      // Convert it to pass it using IPC
+      // ArrayBuffer is not allowed in IPC
+      if (response.byteLength == 0) {
+        response = null;
+      } else {
+        response = new Uint8Array(response);
+      }
+    }
+    
+    ipcRenderer.send("ipc:callback:response", id, response);
+  };
+
+  if (request.readiumSdkCommand) {
+    // This is a readium sdk command
+    callReadiumSdkCommand(request.readiumSdkCommand, request.readiumSdkData, callback);
+  }
+});
+
+function callReadiumSdkCommand(command, data, callback) {
+  let callbackId = readiumSdkMessageId++;
+  readiumSdkCallbackMapping[callbackId] = callback;
+  
+  // Prepare message
+  let message = {
+    id: callbackId,
+    type: command,
+    data: data
+  };
+
+  // Send message
+  readiumSdk.postMessage(message);
+};
+
+readiumSdk.addEventListener("message", (event) => {
+  let callbackId = event.data.id;
+  let callback = readiumSdkCallbackMapping[callbackId];
+  callback(event.data.data);
+  delete readiumSdkCallbackMapping[callbackId];
+}, true);
+
+
+// Register epub protocol as a privileged protocol
+// So fetch function works
 webFrame.registerURLSchemeAsPrivileged("epub");
 
 function renderExplorer(currentDirectory, directories, books) {
@@ -68,14 +125,12 @@ function exploreDirectory(currentDirectory) {
     } else if (path.extname(itemPath) == ".epub") {
       // Store all promises that parse epub
       bookPromises.push(new Promise((resolve, reject) => {
-        parseBook("epub://" + itemPath).then(data => {
+        callReadiumSdkCommand("container:readMetadata", {"path": itemPath}, (data) => {
           resolve({
             path: itemPath,
-            metadata: data.metadata
+            metadata: data
           });
-        }).catch(err => {
-          resolve(null);
-        });
+        }); 
       }));
     }
     
@@ -90,7 +145,7 @@ function exploreDirectory(currentDirectory) {
       books.push({
         path: bookData.path,
         title: bookData.metadata.title,
-        author: bookData.metadata.creator
+        author: bookData.metadata.authors
       });
     });
     

@@ -1,9 +1,33 @@
-import {app, BrowserWindow, protocol, session } from "electron";
+import {app, protocol, session, ipcMain, BrowserWindow } from "electron";
+import electron from "electron";
 import JSZip from "jszip";
 import fs from "fs";
 import path from "path";
 import process from "process";
 import os from "os";
+
+// Register readium sdk
+let readiumPluginPath = "";
+
+switch (os.platform()) {
+  case "linux":
+    readiumPluginPath = path.resolve(__dirname, "../../library", "linux", "libreadium.so");
+    break;
+  case "win32":
+    readiumPluginPath = path.resolve(__dirname, "../../library", "win", "readium.dll");
+    break;
+  case "darwin":
+    readiumPluginPath = path.resolve(__dirname, "../../library", "mac", "libreadium.dylib");
+    break;
+}
+
+if (!fs.existsSync(readiumPluginPath)) {
+  console.log("Unable to find readium plugin");
+  app.quit();
+}
+
+app.commandLine.appendSwitch("register-pepper-plugins", readiumPluginPath + ";application/x-ppapi-readium");
+
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,39 +42,36 @@ app.on("window-all-closed", function() {
   }
 });
 
+// Implements callback feature for the communication of
+// main process <=> renderer process
+var ipcCallbackMapping = {};
+var ipcCallbackId = 0;
+
+function ipcSendWithCallback(request, callback) {
+  let id = ipcCallbackId++;
+  ipcCallbackMapping[id] = callback;
+  mainWindow.webContents.send("ipc:callback:request", id, request);
+}
+
+ipcMain.on("ipc:callback:response", (event, id, response) => {
+  let callback = ipcCallbackMapping[id];
+  callback(response);
+  delete ipcCallbackMapping[id];
+});
+
 // Read content in epub
 function readZipContent(epubPath, epubContentPath, callback) {
-  fs.readFile(epubPath, function(err, data) {
-    if (err) {
-      return console.log(err);
+  // Read zip content using readium sdk that is embed in browser view as a ppapi plugin
+  ipcSendWithCallback({
+    readiumSdkCommand: "container:readStream", 
+    readiumSdkData: {
+      "path": epubPath, 
+      "contentPath": epubContentPath
+    }}, 
+    (data) => {
+      callback(data);
     }
-
-    JSZip.loadAsync(data)
-      .then(function (zip) {
-        var epubFile = zip.file(epubContentPath);
-
-        if (epubFile == null) {
-          if (epubContentPath.startsWith("OPS")) {
-            // Try EPUB, OEBPS sub directory
-            epubFile = zip.file("EPUB" + epubContentPath.substring(3));
-          }
-
-          if (epubFile == null) {
-            console.log('Unable to open content', epubPath, epubContentPath);
-            return callback(null);
-          }
-        }
-
-        epubFile.async("nodebuffer").then(function(data) {
-          callback(data);
-        });
-      })
-      .catch(function (err) {
-        console.log('Unable to parse', epubPath, epubContentPath);
-        console.log(err);
-        return callback(null);
-      });
-  });
+  );
 }
 
 // This method will be called when Electron has finished
@@ -84,7 +105,7 @@ app.on("ready", function() {
       // Replace back slash by slash
       epubContentPath = epubContentPath.replace(/\\/g, "/");
 
-      readZipContent(epubFilePath, epubContentPath, function(data) {
+      readZipContent(epubFilePath, epubContentPath, (data) => {
           callback(data);
       });
     } else {
