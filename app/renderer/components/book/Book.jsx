@@ -1,12 +1,11 @@
-import React from "react";
-
-import { viewBook } from 'renderer/actions'
+import React from 'react';
+import path from 'path';
+import {viewBook} from 'renderer/actions';
 
 class Book extends React.Component {
   constructor(props) {
-      super(props);
-
-      this.handleClick = this.handleClick.bind(this);
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
@@ -14,10 +13,13 @@ class Book extends React.Component {
   }
 
   render() {
+    var filename = path.basename(this.props.book.path);
+
     return (
       <div className="book" onClick={this.handleClick}>
         <div className="title">{this.props.book.title}</div>
         <div className="author">{this.props.book.author}</div>
+        <div className="filename">{filename}</div>
       </div>
     );
   }
@@ -25,7 +27,7 @@ class Book extends React.Component {
 
 
 Book.contextTypes = {
-    store: React.PropTypes.object
-}
+  store: React.PropTypes.object
+};
 
 export default Book;
