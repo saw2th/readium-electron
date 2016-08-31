@@ -11,7 +11,11 @@ let readiumPluginPath = "";
 
 switch (os.platform()) {
   case "linux":
-    readiumPluginPath = path.resolve(__dirname, "../../library", "linux", "libreadium.so");
+    if (process.env.ENVIRONMENT === 'DEV') {
+      readiumPluginPath = path.resolve(__dirname, "../../out/Default/lib", "libreadium.so");
+    } else {
+      readiumPluginPath = path.resolve(__dirname, "../../library", "linux", "libreadium.so");
+    }
     break;
   case "win32":
     readiumPluginPath = path.resolve(__dirname, "../../library", "win", "readium.dll");
@@ -27,7 +31,6 @@ if (!fs.existsSync(readiumPluginPath)) {
 }
 
 app.commandLine.appendSwitch("register-pepper-plugins", readiumPluginPath + ";application/x-ppapi-readium");
-
 
 // Keep a global reference of the window object, if you don"t, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -63,11 +66,11 @@ ipcMain.on("ipc:callback:response", (event, id, response) => {
 function readZipContent(epubPath, epubContentPath, callback) {
   // Read zip content using readium sdk that is embed in browser view as a ppapi plugin
   ipcSendWithCallback({
-    readiumSdkCommand: "container:readStream", 
+    readiumSdkCommand: "container:readStream",
     readiumSdkData: {
-      "path": epubPath, 
+      "path": epubPath,
       "contentPath": epubContentPath
-    }}, 
+    }},
     (data) => {
       callback(data);
     }
@@ -162,7 +165,7 @@ app.on("ready", function() {
   });*/
 
   // Only open dev tools in dev environment
-  if(process.env.ENVIRONMENT === "DEV") {
+  if (process.env.ENVIRONMENT === 'DEV') {
     // Open the DevTools.
     mainWindow.openDevTools();
   }
