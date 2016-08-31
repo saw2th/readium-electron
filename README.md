@@ -6,20 +6,20 @@ npm run build-watch
 
 npm run electron-dev
 
-Debug with visual studio code 
+Debug with visual studio code
 {
     "name": "Launch Electron",
     "type": "node",
     "program": "${workspaceRoot}/app/main.js", // this is important
     "stopOnEntry": false,
-    "args": [] 
+    "args": []
     "cwd": "${workspaceRoot}",
     // as you have noted, this is also important:
     "runtimeExecutable": "${workspaceRoot}/node_modules/electron-prebuilt/dist/electron.exe",
     "runtimeArguments": [],
     "env": { },
     "sourceMaps": false,
-}, 
+},
 
 
     plugins: [
@@ -36,7 +36,16 @@ Debug with visual studio code
 sudo apt install icnsutils
 sudo apt install graphicsmagick
 
+
+
+xxd -i assets/lcp/lcp.crt src/assets.h
+
+Remove
+-----BEGIN CERTIFICATE-----
+-----END CERTIFICATE-----
+and carriage returns from CERTIFICATE
 # TODO
 
     "lint": "node ./node_modules/.bin/eslint",
     "lint-jsx": "node ./node_modules/.bin/eslint app/**/**.jsx",
+
