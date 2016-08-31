@@ -1,12 +1,17 @@
 {
   'includes': [
-    'filenames.gypi'
+    'filenames.gypi',
+    'vendor/readium-lcp-client/platform/cross-platform/filenames.gypi'
   ],
   'variables': {
     'nacl_sdk_dir': './vendor/nacl_sdk/pepper_49',
     'ppapi_include_dir': '<(nacl_sdk_dir)/include',
     'epub3_root_dir': './vendor/readium-sdk/Platform/cross-platform',
     'epub3_include_dir': '<(epub3_root_dir)/include',
+    'lcp_root_dir': './vendor/readium-lcp-client',
+    'lcp_client_lib_dir': '<(lcp_root_dir)/src/lcp-client-lib',
+    'lcp_client_lib_include_dir': '<(lcp_client_lib_dir)/public',
+    'lcp_content_filter_include_dir': '<(lcp_root_dir)/src/lcp-content-filter/public',
     'libxml2_include_dir': '<(epub3_root_dir)/vendor/libxml2/include'
   },
   'target_defaults': {
@@ -28,14 +33,23 @@
       'include_dirs': [
         '<(ppapi_include_dir)',
         '<(epub3_include_dir)',
+        '<(lcp_client_lib_dir)',
+        '<(lcp_client_lib_include_dir)',
+        '<(lcp_content_filter_include_dir)',
         '<(libxml2_include_dir)'
       ],
       'dependencies': [
         'vendor/readium-sdk/Platform/cross-platform/readium.gyp:epub3',
+        'vendor/readium-lcp-client/platform/cross-platform/lcp.gyp:lcp_client_lib',
         'ppapi'
       ],
       'sources': [
-        'src/readium.cc'
+        '<@(lcp_content_filter_sources)',
+        'src/readium.cc',
+        'src/readium_net_provider.cc',
+        'src/readium_storage_provider.cc',
+        'src/readium_dictionary.cc',
+        'src/readium_credential_handler.cc'
       ]
     },
     {
