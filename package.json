@@ -57,9 +57,19 @@
     "rmdir": "^1.2.0",
     "cross-env": "^2.0.0"
   },
+  "devDependencies": {
+    "eslint": "^3.2.2",
+    "eslint-config-google": "^0.6.0"
+  },
   "babel": {
-    "presets": ["es2015", "stage-0", "react"],
-    "plugins": ["transform-inline-environment-variables"]
+    "presets": [
+      "es2015",
+      "stage-0",
+      "react"
+    ],
+    "plugins": [
+      "transform-inline-environment-variables"
+    ]
   },
   "scripts": {
     "build-renderer": "./node_modules/.bin/webpack --config webpack.config.renderer.js",
