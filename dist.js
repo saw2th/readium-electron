@@ -27,6 +27,7 @@ builder.build({
       "appId": "readium.electron",
       "app-category-type": "ebook",
       "npmRebuild": false,
+      "extraFiles": "library/linux/libreadium.so",
       "win": {
         "icon": "assets/win/app.ico"
       },
