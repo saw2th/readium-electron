@@ -21,7 +21,11 @@ switch (os.platform()) {
     readiumPluginPath = path.resolve(__dirname, "../../library", "win", "readium.dll");
     break;
   case "darwin":
-    readiumPluginPath = path.resolve(__dirname, "../../library", "mac", "libreadium.dylib");
+    if (process.env.ENVIRONMENT === 'DEV') {
+      readiumPluginPath = path.resolve(__dirname, "../../out/Default", "libreadium.dylib");
+    } else {
+      readiumPluginPath = path.resolve(__dirname, "../../library", "mac", "libreadium.dylib");
+    } 
     break;
 }
 
