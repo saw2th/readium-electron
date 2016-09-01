@@ -14,6 +14,7 @@
       '<(ppapi_dir)/view.cc',
       '<(ppapi_dir)/rect.cc',
       '<(ppapi_dir)/var.cc',
+      '<(ppapi_dir)/var_array.cc',
       '<(ppapi_dir)/var_dictionary.cc',
       '<(ppapi_dir)/var_array_buffer.cc'
     ]
