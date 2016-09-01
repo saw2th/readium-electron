@@ -13,16 +13,16 @@ class ReadiumDictionary : public lcp::KvStringsIterator
 {
 private:
   std::map<std::string, std::string> keyValueMapping;
-  std::map<std::string, uint> keyIndexMapping;
+  std::map<std::string, int> keyIndexMapping;
   std::vector<std::string> keys;
-  uint currentIndex;
+  int currentIndex;
 public:
   ReadiumDictionary();
   ~ReadiumDictionary();
   void First();
   void Next();
   bool IsDone() const;
-  uint Size() const;
+  int Size() const;
   void Set(const std::string &key, const std::string &value);
   void Del(const std::string &key);
   const std::string & Get(const std::string &key) const;

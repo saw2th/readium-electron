@@ -19,7 +19,7 @@ const std::string &ReadiumDictionary::Current() const {
     throw std::out_of_range("Iterator is out of range");
   }
 
-  return this->keyValueMapping[this->keys[this->currentIndex]];
+  return this->keyValueMapping.at(this->keys[this->currentIndex]);
 }
 
 std::string ReadiumDictionary::CurrentKey() const {
@@ -30,19 +30,19 @@ std::string ReadiumDictionary::CurrentKey() const {
   return this->keys[currentIndex];
 }
 
-uint ReadiumDictionary::Size() const {
+int ReadiumDictionary::Size() const {
   return this->keys.size();
 }
 
 void ReadiumDictionary::Set(const std::string &key, const std::string &value) {
-  uint keyIndex = this->keys.size();
+  int keyIndex = this->keys.size();
   this->keys.push_back(key);
-  this->keyIndexMapping.insert(std::pair<std::string, uint>(key, keyIndex));
+  this->keyIndexMapping.insert(std::pair<std::string, int>(key, keyIndex));
   this->keyValueMapping.insert(std::pair<std::string, std::string>(key, value));
 }
 
 void ReadiumDictionary::Del(const std::string &key) {
-  uint keyIndex = this->keyIndexMapping.at(key);
+  int keyIndex = this->keyIndexMapping.at(key);
   this->keys.erase(this->keys.begin() + keyIndex);
   this->keyValueMapping.erase(key);
   this->keyIndexMapping.erase(key);
