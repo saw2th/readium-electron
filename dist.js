@@ -1,17 +1,20 @@
 import builder, {Platform} from "electron-builder";
 import os from "os";
 
-var targets = null;
+let targets = null;
+let extraFiles = null;
 
 switch (os.platform()) {
   case "linux":
     targets =Platform.LINUX.createTarget(["deb"]);
+    extraFiles = "library/linux/libreadium.so";
     break;
   case "win32":
     targets = Platform.WINDOWS.createTarget(["nsis"]);
     break;
   case "darwin":
-    targets = Platform.MAC.createTarget(["dev"]);
+    targets = Platform.MAC.createTarget(["dmg"]);
+    extraFiles = "library/mac/libreadium.dylib";
     break;
 }
 
@@ -27,7 +30,7 @@ builder.build({
       "appId": "readium.electron",
       "app-category-type": "ebook",
       "npmRebuild": false,
-      "extraFiles": "library/linux/libreadium.so",
+      "extraFiles": extraFiles,
       "win": {
         "icon": "assets/win/app.ico"
       },
