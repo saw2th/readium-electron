@@ -140,7 +140,7 @@ function exploreDirectory(currentDirectory) {
     var books = [];
     
     bookDataList.forEach(bookData => {
-      if (bookData == null) return;
+      if (bookData == null || bookData.metadata == null) return;
       
       books.push({
         path: bookData.path,
